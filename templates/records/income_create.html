@@ -1,0 +1,7 @@
+<h2>Income creation</h2>
+<form action="{% url 'income_create' %}" method="POST">
+    {{ form.as_p }}
+    {% csrf_token %}
+    <button type="submit" class="btn btn-success">Save</button>
+    <a href="{% url 'record_list' %}" class="btn btn-secondary">Cancel</a>
+</form>

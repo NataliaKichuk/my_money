@@ -9,3 +9,4 @@ def record_date_validator(value):
 
 	if value > date.today():
 		raise ValidationError('This date is in the future!')
+

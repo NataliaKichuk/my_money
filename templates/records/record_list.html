@@ -1,0 +1,43 @@
+{% extends '../base.html' %}
+
+{% block title %}Incomes and expenses{% endblock %}
+
+{% block content %}
+
+    <div style="text-align: center">
+        <h1 style="color: mediumseagreen; font-family: 'Montserrat'">Incomes and expenses</h1>
+    </div>
+
+    <h3>Balance: {{ balance|floatformat:2 }}</h3>
+    <a class="create-btn" href="{% url 'income_create' %}">Add Income</a>
+    <a class="create-btn" href="{% url 'expense_create' %}">Add Expense</a>
+
+    <table style="width: 100%;">
+         <tr>
+            <th style="width:15%">Date</th>
+            <th style="width:15%">Category</th>
+            <th style="width:10%">Amount of income</th>
+            <th style="width:10%">Amount of expense</th>
+            <th style="width:25%">Description</th>
+            <th style="width:5%">Author</th>
+            <th style="width:10%">Actions</th>
+        </tr>
+        {% for rec in records %}
+        <tr>
+            <td>{{ rec.date }}</td>
+            <td class="td-longstring">{{ rec.category }}</td>
+            <td>{{ rec.amount_of_income|floatformat:2 }}</td>
+            <td>{{ rec.amount_of_expense|floatformat:2 }}</td>
+            <td class="td-longstring">{{ rec.description }}</td>
+            <td>{{ rec.author }}</td>
+            <td class="actions-cell">
+                <a class="action-btn" href="{% url 'record_edit' rec.id %}">Edit</a>
+                <a class="action-btn" href="{% url 'record_delete' rec.id %}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% include '../pagination.html' with page=records %}
+
+{% endblock %}

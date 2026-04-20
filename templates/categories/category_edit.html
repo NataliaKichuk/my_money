@@ -1,0 +1,12 @@
+{% extends '../base.html' %}
+
+{% block content %}
+<h2>Category edititon</h2>
+<form action="{% url 'category_edit' category.id %}" method="POST">
+    {{ form.as_p }}
+    {% csrf_token %}
+    <button type="submit">Save</button>
+    <a href="{% url 'categories_list' %}">Cancel</a>
+</form>
+
+{% endblock %}

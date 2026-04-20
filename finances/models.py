@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
@@ -21,6 +22,25 @@ class Record(TimestampMixin):
 	description = models.TextField(null=True, blank=True)
 	author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_records')
 
+	def clean(self):
+		super().clean()
+
+		if self.category and self.record_type:
+			# Сравниваем тип записи и тип связанной категории
+			if self.record_type != self.category.category_type:
+				raise ValidationError({
+					'record_type': (
+						f"Record type '{self.get_record_type_display()}' "
+						f"does not match the category type '{self.category.get_category_type_display()}'."
+					)
+				})
+
+	def save(self, *args, **kwargs):
+		self.full_clean()
+		super().save(*args, **kwargs)
+
+	def __str__(self):
+		return f'{self.category} {self.amount} dated {self.date}'
 
 class Category(TimestampMixin):
 	name = models.CharField(max_length=100)
@@ -31,4 +51,5 @@ class Category(TimestampMixin):
 		verbose_name_plural = "Categories"
 
 	def __str__(self):
-		return f'{self.name} ({self.get_category_type_display()})'
+		#return f'{self.name} ({self.get_category_type_display()})'
+		return self.name

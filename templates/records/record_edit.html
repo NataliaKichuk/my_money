@@ -1,0 +1,11 @@
+{% extends '../base.html' %}
+
+{% block content %}
+<h2>{{ title }}</h2>
+<form method="post" action="{% url 'record_edit' record.id %}">
+    {{ form.as_p }}
+    {% csrf_token %}
+    <button type="submit" class="btn btn-success">Save</button>
+    <a href="{% url 'record_list' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
