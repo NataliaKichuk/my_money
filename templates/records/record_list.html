@@ -8,26 +8,42 @@
         <h1 style="color: mediumseagreen; font-family: 'Montserrat'">Incomes and expenses</h1>
     </div>
 
-    <h3>Balance: {{ balance|floatformat:2 }}</h3>
-    <a class="create-btn" href="{% url 'income_create' %}">Add Income</a>
-    <a class="create-btn" href="{% url 'expense_create' %}">Add Expense</a>
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px;">
+        <div>
+            <a class="create-btn" href="{% url 'income_create' %}">Add Income</a>
+            <a class="create-btn" href="{% url 'expense_create' %}">Add Expense</a>
+        </div>
+
+        <div style="text-align: right;">
+            <h3 style="margin: 5px 0;">Total income amount: {{ total_income_amount|floatformat:2 }}</h3>
+            <h3 style="margin: 5px 0;">Total expense amount: {{ total_expense_amount|floatformat:2 }}</h3>
+            <h3 style="margin: 5px 0;">Balance: {{ balance|floatformat:2 }}</h3>
+        </div>
+    </div>
 
     <table style="width: 100%;">
          <tr>
-            <th style="width:15%">Date</th>
+            <th style="width:10%">Date</th>
             <th style="width:15%">Category</th>
-            <th style="width:10%">Amount of income</th>
-            <th style="width:10%">Amount of expense</th>
+            <th style="width:10%">Income amount</th>
+            <th style="width:10%">Expense amount</th>
             <th style="width:25%">Description</th>
             <th style="width:5%">Author</th>
             <th style="width:10%">Actions</th>
         </tr>
         {% for rec in records %}
         <tr>
-            <td>{{ rec.date }}</td>
+            <td>{{ rec.date|date:"d.m.Y" }}</td>
             <td class="td-longstring">{{ rec.category }}</td>
-            <td>{{ rec.amount_of_income|floatformat:2 }}</td>
-            <td>{{ rec.amount_of_expense|floatformat:2 }}</td>
+            <td style="text-align: right; color: green">
+                {% if rec.record_type == 'INC' %}
+                    {{ rec.income_amount|floatformat:2 }}</td>
+                {% endif %}
+            <td style="text-align: right; color: red">
+                {% if rec.record_type == 'EXP' %}
+                    {{ rec.expense_amount|floatformat:2 }}
+                {% endif %}
+            </td>
             <td class="td-longstring">{{ rec.description }}</td>
             <td>{{ rec.author }}</td>
             <td class="actions-cell">

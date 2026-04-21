@@ -1,6 +1,7 @@
 
 .td-longstring {
-       border-collapse: collapse; border-style: groove;
+       border-collapse: collapse;
+       border-style: groove;
        word-wrap: break-word;
        overflow-wrap: break-word;
        word-break: break-word;

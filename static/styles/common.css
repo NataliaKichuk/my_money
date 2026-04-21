@@ -6,16 +6,37 @@ table {
         table-layout: fixed;
         }
 
-td, th {
+td {
     border-style: groove;
     padding: 10px;
     text-align: left;
 }
 
+
+th {
+    border-style: groove;
+    padding: 10px;
+    text-align: center;
+}
+
 nav {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
      background-color: lightgray;
      padding: 10px;
      font-size: 20px;
+
+}
+
+.nav-links, .auth-links {
+    display: flex;
+    gap: 15px;
+}
+
+.auth-links a {
+    font-weight: 700;
+
 }
 
 .dashboard a {

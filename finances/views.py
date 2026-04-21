@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from finances.forms import RecordCreateForm, RecordEditForm, CategoryCreateForm, CategoryEditForm
 from finances.models import Record, Category
+from finances.services import get_total_income_amount, get_total_expense_amount, get_balance
 
 
 def home_view(request):
@@ -14,21 +15,32 @@ def record_list(request):
 	if not user.is_authenticated:
 		return redirect('login')
 
-	total_income_amount = Record.objects.filter(record_type='INC', author=user).aggregate(total_amount=Sum('amount'))['total_amount'] or 0
-	total_expense_amount = Record.objects.filter(record_type='EXP', author=user).aggregate(total_amount=Sum('amount'))['total_amount'] or 0
-	balance = total_income_amount - total_expense_amount
-
 	records = (Record.objects.
-			   filter(author=user)
-	           .annotate(amount_of_income=Case(When(record_type='INC', then='amount'), default=Value(0), output_field=DecimalField(max_digits=15, decimal_places=2)))
-	           .annotate(amount_of_expense=Case(When(record_type='EXP', then='amount'), default=Value(0), output_field=DecimalField(max_digits=15, decimal_places=2)))
+			   filter(author=user).
+	           annotate(income_amount=
+	                    Case(When(record_type='INC', then='amount'),
+	                    default=Value(0),
+	                    output_field=DecimalField(max_digits=15, decimal_places=2))).
+	           annotate(expense_amount=
+	                    Case(When(record_type='EXP', then='amount'),
+	                    default=Value(0),
+	                    output_field=DecimalField(max_digits=15, decimal_places=2)))
 	           .order_by('-date'))
 
-	paginator = Paginator(records, 5)
+	paginator = Paginator(records, 4)
 	page_number = request.GET.get('page', 1)
 	record_list = paginator.page(page_number)
 
-	context = {'records': record_list, 'balance': balance}
+	total_income_amount = get_total_income_amount(user)
+	total_expense_amount = get_total_expense_amount(user)
+	balance = get_balance(user)
+
+	context = {
+		'records': record_list,
+		'total_income_amount': total_income_amount,
+		'total_expense_amount': total_expense_amount,
+		'balance': balance}
+
 	return render(request, 'records/record_list.html', context)
 
 def income_create(request):
@@ -86,6 +98,10 @@ def record_delete(request, pk):
 	return render(request, 'records/record_delete.html', context)
 
 def category_list(request):
+	user = request.user
+	if not user.is_authenticated:
+		return redirect('login')
+
 	objects = Category.objects.all()
 	context = {'objects': objects}
 	return render(request, 'categories/category_list.html', context)

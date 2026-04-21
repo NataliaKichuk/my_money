@@ -19,4 +19,28 @@ A lightweight web application built with **Django** and **PostgreSQL** (or SQLit
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/NataliaKichuk/my_money.git
+   cd my_money
    
+2. **Create a virtual environment:**
+   ```bash
+   python -m venv venv
+   
+3. **Activate the virtual environment:**
+   ```bash
+   Windows: venv\Scripts\activate```
+   
+4. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt```
+
+5. **Apply database migrations:**
+   ```bash
+   python manage.py migrate```
+
+6. **Create a superuser:**
+   ```bash
+   python manage.py createsuperuser
+
+7. **Run the development server:**
+   ```bash
+   python manage.py runserver
