@@ -19,7 +19,10 @@ A lightweight web application built with **Django** and **PostgreSQL** (or SQLit
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/NataliaKichuk/my_money.git
+   ```
+   ```bash
    cd my_money
+   ``` 
    
 2. **Create a virtual environment:**
    ```bash
@@ -28,25 +31,48 @@ A lightweight web application built with **Django** and **PostgreSQL** (or SQLit
 3. **Activate the virtual environment:**
    ```bash
    Windows: venv\Scripts\activate
+   ```
+   ```bash
    macOS/Linux: source venv/bin/activate
+   ```
    
 4. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
+   ```
+   
+5. **Setting up the Environment File:**  
+   *(only required if you prefer to use PostgreSQL; by default, the project uses SQLite.)*:
 
-5. **Setting up the Environment File (only required if you prefer to use PostgreSQL, by default, the project uses SQLite.):**
-   ```bash
-   Create .env file: Rename .env.example to .env.
-   Open the .env file in your text editor and follow the instructions given there
+     * **Create .env file:** Rename .env.example to .env.  
+     * **Configure:** Open the .env file in your text editor and follow the instructions given there.  
+
    
 6. **Apply database migrations:**
    ```bash
    python manage.py migrate
-
-7. **Create a superuser:**
-   ```bash
-   python manage.py createsuperuser
-
-8. **Run the development server:**
+   ```
+   
+7. **Run the development server:**
    ```bash
    python manage.py runserver
+   ```
+   
+8. **How to use:**
+
+    #### As a Regular User (Quick Start)
+
+   * Go to the registration page: `http://127.0.0.1:8000/accounts/signup/`  
+   * Create a new account.  
+   * Log in and start tracking your personal finances immediately.  
+   
+    #### As an Administrator (Full Access)
+
+    If you want to access the Django Admin Panel to manage all data and users: 
+
+   * Create a superuser in your terminal:
+      ```bash
+      python manage.py createsuperuser
+      ```
+   * Follow the prompts to set your username and password.  
+   * Log in at: `http://127.0.0.1:8000/admin/`
