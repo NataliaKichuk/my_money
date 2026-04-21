@@ -27,20 +27,25 @@ A lightweight web application built with **Django** and **PostgreSQL** (or SQLit
    
 3. **Activate the virtual environment:**
    ```bash
-   Windows: venv\Scripts\activate```
+   Windows: venv\Scripts\activate
    
 4. **Install dependencies:**
    ```bash
-   pip install -r requirements.txt```
+   pip install -r requirements.txt
 
-5. **Apply database migrations:**
+5. **Setting up the Environment File (only required if you prefer to use PostgreSQL, by default, the project uses SQLite.):**
    ```bash
-   python manage.py migrate```
+   Create .env file: Rename .env.example to .env.
+   Open the .env file in your text editor and follow the instructions given there
+   
+6. **Apply database migrations:**
+   ```bash
+   python manage.py migrate
 
-6. **Create a superuser:**
+7. **Create a superuser:**
    ```bash
    python manage.py createsuperuser
 
-7. **Run the development server:**
+8. **Run the development server:**
    ```bash
    python manage.py runserver
