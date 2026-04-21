@@ -28,6 +28,7 @@ A lightweight web application built with **Django** and **PostgreSQL** (or SQLit
 3. **Activate the virtual environment:**
    ```bash
    Windows: venv\Scripts\activate
+   macOS/Linux: source venv/bin/activate
    
 4. **Install dependencies:**
    ```bash
