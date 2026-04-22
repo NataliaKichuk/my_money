@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'finances',
     'accounts',
     'django_extensions',
+    'django_filters',
 
 ]
 

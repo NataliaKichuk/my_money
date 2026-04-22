@@ -8,10 +8,20 @@
         <h1 style="color: mediumseagreen; font-family: 'Montserrat'">Incomes and expenses</h1>
     </div>
 
+
     <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px;">
         <div>
             <a class="create-btn" href="{% url 'income_create' %}">Add Income</a>
             <a class="create-btn" href="{% url 'expense_create' %}">Add Expense</a>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+
+            <form method="get"; style="display: flex; align-items: center; gap: 15px;">
+            {{ filter.form.as_p }}
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a href="?">Clear</a>
+            </form>
         </div>
 
         <div style="text-align: right;">
@@ -21,38 +31,43 @@
         </div>
     </div>
 
-    <table style="width: 100%;">
-         <tr>
-            <th style="width:10%">Date</th>
-            <th style="width:15%">Category</th>
-            <th style="width:10%">Income amount</th>
-            <th style="width:10%">Expense amount</th>
-            <th style="width:25%">Description</th>
-            <th style="width:5%">Author</th>
-            <th style="width:10%">Actions</th>
-        </tr>
-        {% for rec in records %}
-        <tr>
-            <td>{{ rec.date|date:"d.m.Y" }}</td>
-            <td class="td-longstring">{{ rec.category }}</td>
-            <td style="text-align: right; color: green">
-                {% if rec.record_type == 'INC' %}
-                    {{ rec.income_amount|floatformat:2 }}</td>
-                {% endif %}
-            <td style="text-align: right; color: red">
-                {% if rec.record_type == 'EXP' %}
-                    {{ rec.expense_amount|floatformat:2 }}
-                {% endif %}
-            </td>
-            <td class="td-longstring">{{ rec.description }}</td>
-            <td>{{ rec.author }}</td>
-            <td class="actions-cell">
-                <a class="action-btn" href="{% url 'record_edit' rec.id %}">Edit</a>
-                <a class="action-btn" href="{% url 'record_delete' rec.id %}">Delete</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+
+    <div>
+        <table style="width: 100%;">
+             <tr>
+                <th style="width:10%">Date</th>
+                <th style="width:15%">Category</th>
+                <th style="width:10%">Income amount</th>
+                <th style="width:10%">Expense amount</th>
+                <th style="width:25%">Description</th>
+                <th style="width:5%">Author</th>
+                <th style="width:10%">Actions</th>
+            </tr>
+            {% for rec in records %}
+            <tr>
+                <td>{{ rec.date|date:"d.m.Y" }}</td>
+                <td class="td-longstring">{{ rec.category }}</td>
+                <td style="text-align: right; color: green">
+                    {% if rec.record_type == 'INC' %}
+                        {{ rec.income_amount|floatformat:2 }}</td>
+                    {% endif %}
+                <td style="text-align: right; color: red">
+                    {% if rec.record_type == 'EXP' %}
+                        {{ rec.expense_amount|floatformat:2 }}
+                    {% endif %}
+                </td>
+                <td class="td-longstring">{{ rec.description }}</td>
+                <td>{{ rec.author }}</td>
+                <td class="actions-cell">
+                    <a class="action-btn" href="{% url 'record_edit' rec.id %}">Edit</a>
+                    <a class="action-btn" href="{% url 'record_delete' rec.id %}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
 
     {% include '../pagination.html' with page=records %}
 

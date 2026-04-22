@@ -2,6 +2,7 @@ from django.core.paginator import Paginator
 from django.db.models import Case, When, Value, DecimalField, Sum
 from django.shortcuts import render, redirect, get_object_or_404
 
+from finances.filters import RecordFilter
 from finances.forms import RecordCreateForm, RecordEditForm, CategoryCreateForm, CategoryEditForm
 from finances.models import Record, Category
 from finances.services import get_total_income_amount, get_total_expense_amount, get_balance
@@ -15,17 +16,13 @@ def record_list(request):
 	if not user.is_authenticated:
 		return redirect('login')
 
-	records = (Record.objects.
-			   filter(author=user).
-	           annotate(income_amount=
-	                    Case(When(record_type='INC', then='amount'),
-	                    default=Value(0),
-	                    output_field=DecimalField(max_digits=15, decimal_places=2))).
-	           annotate(expense_amount=
-	                    Case(When(record_type='EXP', then='amount'),
-	                    default=Value(0),
-	                    output_field=DecimalField(max_digits=15, decimal_places=2)))
-	           .order_by('-date'))
+	records = Record.objects.filter(author=user).order_by('-date')
+	f_records = RecordFilter(request.GET, records)
+	records = RecordFilter(request.GET, records).qs
+
+	records = records.annotate(income_amount=Case(When(record_type='INC', then='amount'), default=Value(0), output_field=DecimalField()),
+		   expense_amount=Case(When(record_type='EXP', then='amount'), default=Value(0), output_field=DecimalField()))
+
 
 	paginator = Paginator(records, 4)
 	page_number = request.GET.get('page', 1)
@@ -37,6 +34,7 @@ def record_list(request):
 
 	context = {
 		'records': record_list,
+		'filter': f_records,
 		'total_income_amount': total_income_amount,
 		'total_expense_amount': total_expense_amount,
 		'balance': balance}
