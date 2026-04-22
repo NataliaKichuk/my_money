@@ -10,9 +10,23 @@ class TimestampMixin(models.Model):
 	class Meta:
 		abstract = True
 
+
 class TransactionType(models.TextChoices):
 		INCOME = 'INC', 'Income'
 		EXPENSE = 'EXP', 'Expense'
+
+
+class Category(TimestampMixin):
+	name = models.CharField(max_length=100)
+	description = models.TextField(null=True, blank=True)
+	category_type = models.CharField(max_length=3, null=False, choices=TransactionType.choices)
+
+	class Meta:
+		verbose_name_plural = "Categories"
+
+	def __str__(self):
+		#return f'{self.name} ({self.get_category_type_display()})'
+		return self.name
 
 class Record(TimestampMixin):
 	category = models.ForeignKey('Category', on_delete=models.PROTECT, related_name='category_records')
@@ -26,7 +40,6 @@ class Record(TimestampMixin):
 		super().clean()
 
 		if self.category and self.record_type:
-			# Сравниваем тип записи и тип связанной категории
 			if self.record_type != self.category.category_type:
 				raise ValidationError({
 					'record_type': (
@@ -42,14 +55,3 @@ class Record(TimestampMixin):
 	def __str__(self):
 		return f'{self.category} {self.amount} dated {self.date}'
 
-class Category(TimestampMixin):
-	name = models.CharField(max_length=100)
-	description = models.TextField(null=True, blank=True)
-	category_type = models.CharField(max_length=3, null=False, choices=TransactionType.choices)
-
-	class Meta:
-		verbose_name_plural = "Categories"
-
-	def __str__(self):
-		#return f'{self.name} ({self.get_category_type_display()})'
-		return self.name
